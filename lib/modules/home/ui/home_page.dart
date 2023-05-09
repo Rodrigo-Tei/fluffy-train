@@ -14,11 +14,22 @@ class HomePage extends StatefulWidget {
 
 @override
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _handleListener(
@@ -57,28 +68,43 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _handlePopDialog() {
+    if (_showDialog) {
+      setState(() {
+        _showDialog = !_showDialog;
+      });
+    }
+  }
+
+  void _scrollListener() {
+    _handlePopDialog();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: _handleListener,
       builder: (BuildContext context, HomePageState state) {
         return Scaffold(
-          body: ListView.builder(
-            itemCount: 15,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Container(
-                  margin: _calculateMargin(index),
-                  child: Stack(
-                    children: [
-                      LessonButton(toggleDialog: _toggleDialog),
-                      if (_showDialog)
-                        LessonDialog(dialogPosition: _dialogPosition),
-                    ],
-                  ),
+          body: GestureDetector(
+            onTap: _handlePopDialog,
+            child: Stack(
+              children: [
+                ListView.builder(
+                  controller: _scrollController,
+                  itemCount: 15,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(
+                      child: Container(
+                        margin: _calculateMargin(index),
+                        child: LessonButton(toggleDialog: _toggleDialog),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+                if (_showDialog) LessonDialog(dialogPosition: _dialogPosition),
+              ],
+            ),
           ),
         );
       },
