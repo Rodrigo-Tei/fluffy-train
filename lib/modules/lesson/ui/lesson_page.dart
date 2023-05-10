@@ -65,6 +65,7 @@ class _LessonPageState extends State<LessonPage> {
                     ))
                   : Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           exercisesList[0],
                           ElevatedButton(
