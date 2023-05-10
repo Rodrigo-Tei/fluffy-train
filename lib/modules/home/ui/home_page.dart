@@ -2,6 +2,9 @@ import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_button.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_dialog.dart';
+import 'package:fluffy_train/modules/lesson/bloc/lesson_page_bloc.dart';
+import 'package:fluffy_train/modules/lesson/bloc/lesson_page_event.dart';
+import 'package:fluffy_train/modules/lesson/bloc/lesson_page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

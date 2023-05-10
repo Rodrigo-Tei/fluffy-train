@@ -1,3 +1,4 @@
+import 'package:fluffy_train/modules/lesson/ui/lesson_page.dart';
 import 'package:fluffy_train/modules/topic/ui/topic_page.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,14 @@ class LessonDialog extends StatelessWidget {
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const LessonPage(null)),
+                        ),
+                      )
+                    },
                     child: const Text('Ir para a aula'),
                   ),
                 ),
