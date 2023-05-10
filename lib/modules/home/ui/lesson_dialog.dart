@@ -43,9 +43,11 @@ class LessonDialog extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => TopicPage())));
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const TopicPage()),
+                        ),
+                      );
                     },
                     child: const Text('Visitar matéria'),
                   ),
@@ -54,9 +56,9 @@ class LessonDialog extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => {},
-                    child: const Text('Praticar aula'),
+                    child: const Text('Ir para a aula'),
                   ),
-                )
+                ),
               ],
             ),
           ],

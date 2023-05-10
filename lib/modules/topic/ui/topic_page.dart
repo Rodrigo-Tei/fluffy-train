@@ -67,12 +67,35 @@ class _TopicPageState extends State<TopicPage> {
                 ],
               ),
             ),
-            body: TabBarView(
+            body: Column(
               children: [
-                _buildTextBloc(loremIpsum, 'TITULO 1'),
-                _buildTextBloc(loremIpsum2, 'TITULO 2'),
-                _buildTextBloc(loremIpsum3, 'TITULO 3'),
-                _buildTextBloc(loremIpsum4, 'TITULO 4'),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      SingleChildScrollView(
+                        child: _buildTextBloc(loremIpsum, 'TITULO 1'),
+                      ),
+                      SingleChildScrollView(
+                        child: _buildTextBloc(loremIpsum2, 'TITULO 2'),
+                      ),
+                      SingleChildScrollView(
+                        child: _buildTextBloc(loremIpsum3, 'TITULO 3'),
+                      ),
+                      SingleChildScrollView(
+                        child: _buildTextBloc(
+                            loremIpsum4 + loremIpsum + loremIpsum2, 'TITULO 4'),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Ir para a aula'),
+                  ),
+                ),
               ],
             ),
           ),
