@@ -22,6 +22,10 @@ class _LessonPageState extends State<LessonPage> {
   @override
   void initState() {
     super.initState();
+    _initExerciseList();
+  }
+
+  void _initExerciseList() {
     if (widget.exercisesList == null) {
       _lessonPageBloc = context.read<LessonPageBloc>();
       _lessonPageBloc.add(FetchLessonPage());
@@ -42,6 +46,10 @@ class _LessonPageState extends State<LessonPage> {
     }
   }
 
+  bool isLastExercise() {
+    return widget.exercisesList != null && widget.exercisesList!.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LessonPageBloc, LessonPageState>(
@@ -50,19 +58,20 @@ class _LessonPageState extends State<LessonPage> {
         return Scaffold(
           body: _loading
               ? Container()
-              : widget.exercisesList != null && widget.exercisesList!.isEmpty
+              : isLastExercise()
                   ? Center(
                       child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => HomePage()),
-                          ),
-                        );
-                      },
-                      child: const Text('próxima'),
-                    ))
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const HomePage()),
+                            ),
+                          );
+                        },
+                        child: const Text('Voltar para Home Page'),
+                      ),
+                    )
                   : Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +79,7 @@ class _LessonPageState extends State<LessonPage> {
                           exercisesList[0],
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: ((context) => LessonPage(
@@ -79,8 +88,8 @@ class _LessonPageState extends State<LessonPage> {
                                 ),
                               );
                             },
-                            child: const Text('próxima'),
-                          )
+                            child: const Text('Próxima'),
+                          ),
                         ],
                       ),
                     ),
