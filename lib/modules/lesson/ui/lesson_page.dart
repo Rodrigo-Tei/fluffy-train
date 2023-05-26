@@ -62,12 +62,7 @@ class _LessonPageState extends State<LessonPage> {
                   ? Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => const HomePage()),
-                            ),
-                          );
+                          Navigator.pop(context);
                         },
                         child: const Text('Voltar para Home Page'),
                       ),

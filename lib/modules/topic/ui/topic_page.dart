@@ -1,3 +1,4 @@
+import 'package:fluffy_train/modules/lesson/ui/lesson_page.dart';
 import 'package:fluffy_train/modules/topic/bloc/topic_page_bloc.dart';
 import 'package:fluffy_train/modules/topic/bloc/topic_page_state.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,14 @@ class _TopicPageState extends State<TopicPage> {
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const LessonPage(null)),
+                        ),
+                      );
+                    },
                     child: const Text('Ir para a aula'),
                   ),
                 ),
