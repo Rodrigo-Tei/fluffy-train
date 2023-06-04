@@ -33,7 +33,9 @@ class AuthService {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  signOut() {
-    FirebaseAuth.instance.signOut();
+  signOut(BuildContext context) async {
+    await FirebaseAuth.instance
+        .signOut()
+        .then((value) => Navigator.pop(context));
   }
 }
