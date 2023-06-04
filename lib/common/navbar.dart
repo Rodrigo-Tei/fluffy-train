@@ -81,7 +81,7 @@ Widget buildNavBar(
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.person),
-        label: 'Home',
+        label: 'Perfil',
       ),
     ],
   );

@@ -34,8 +34,10 @@ class AuthService {
   }
 
   signOut(BuildContext context) async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((value) => Navigator.pop(context));
+    // await FirebaseAuth.instance.signOut().then((value) => Navigator.of(context)
+    //     .pushAndRemoveUntil(
+    //         MaterialPageRoute(builder: (context) => LoginPage()),
+    //         (route) => false));
+    await FirebaseAuth.instance.signOut();
   }
 }

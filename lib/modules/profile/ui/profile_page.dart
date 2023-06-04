@@ -1,4 +1,5 @@
 import 'package:fluffy_train/auth_service.dart';
+import 'package:fluffy_train/common/navbar.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_bloc.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_state.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +27,17 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocConsumer<ProfilePageBloc, ProfilePageState>(
       listener: _handleListener,
       builder: (BuildContext context, ProfilePageState state) {
-        return Center(
-          child: FloatingActionButton(
-            onPressed: () {
-              AuthService().signOut(context);
-            },
-            child: const Text('Sair'),
+        return Scaffold(
+          body: Center(
+            child: FloatingActionButton(
+              onPressed: () {
+                AuthService().signOut(context);
+              },
+              child: const Text('Sair'),
+            ),
           ),
+          bottomNavigationBar:
+              buildNavBar(NavbarPageIndex.profilePage, context, null),
         );
       },
     );
