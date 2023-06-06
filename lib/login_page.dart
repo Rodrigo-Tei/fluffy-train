@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
         child: IconButton(
           icon: const FaIcon(FontAwesomeIcons.google),
           onPressed: () {
-            AuthService().signInWithGoogle();
+            AuthService().signInWithGoogle(context);
           },
         ),
       ),

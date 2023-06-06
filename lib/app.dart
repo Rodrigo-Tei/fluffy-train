@@ -1,4 +1,4 @@
-import 'package:fluffy_train/auth_service.dart';
+import 'package:fluffy_train/login_page.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: DefaultTheme.theme,
-      home: AuthService().handleAuthState(),
+      home: const LoginPage(),
     );
   }
 }

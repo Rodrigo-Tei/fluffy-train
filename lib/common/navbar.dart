@@ -44,8 +44,8 @@ Widget buildNavBar(
       if (onTouch != null) {
         onTouch();
       }
-      if (currentPage?.key != 0) {
-        Navigator.pop(context);
+      if (currentPage?.key == index) {
+        return;
       }
       {
         switch (index) {
@@ -61,7 +61,7 @@ Widget buildNavBar(
             );
             break;
           case 1:
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) =>
