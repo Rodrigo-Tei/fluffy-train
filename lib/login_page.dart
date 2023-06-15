@@ -1,12 +1,13 @@
 import 'package:fluffy_train/auth_service.dart';
+import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -14,8 +15,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: IconButton(
-          icon: const FaIcon(FontAwesomeIcons.google),
+        child: ElevatedButton.icon(
+          icon: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SvgPicture.asset('lib/images/google_icon.svg'),
+          ),
+          label: Text(
+            'Entre com o Google',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: DefaultTheme.grayscale[Grayscale.black]),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: DefaultTheme.grayscale[Grayscale.white],
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          ),
           onPressed: () {
             AuthService().signInWithGoogle(context);
           },
