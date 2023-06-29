@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "926065923371",
+    "project_id": "jam-session-e5950",
+    "storage_bucket": "jam-session-e5950.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926065923371:android:cca5bae6fef3269952216e",
+        "android_client_info": {
+          "package_name": "com.jam_session.fluffy_train"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926065923371-lsai5sc369ii284v0f69bph2jkk9coj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jam_session.fluffy_train",
+            "certificate_hash": "e2b9ecf820ed67df338e7d005145228c6f0b73ae"
+          }
+        },
+        {
+          "client_id": "926065923371-vvg86sn5t7ei6bb8hdtdrktt8ui2j8b0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jam_session.fluffy_train",
+            "certificate_hash": "59ad78b2480595580e623062368ffeac40f8ae64"
+          }
+        },
+        {
+          "client_id": "926065923371-pl6ho4ksfe2lvqtvn7j1mpddkjaqb7o0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXoAbvlZGq7T__Tkf_5Gjrsjxs5qVW2u8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926065923371-fa6nc8o32imco3mmmhir7le5h4b4emvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
