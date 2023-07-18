@@ -136,7 +136,7 @@ class _LessonPageState extends State<LessonPage> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Voltar para Home Page'),
+                        child: const Text('Finalizar exercícios'),
                       ),
                     )
                   : SafeArea(
