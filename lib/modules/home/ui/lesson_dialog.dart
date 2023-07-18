@@ -1,5 +1,5 @@
 import 'package:fluffy_train/modules/lesson/ui/lesson_page.dart';
-import 'package:fluffy_train/modules/topic/ui/topic_page.dart';
+import 'package:fluffy_train/modules/intro/ui/intro_page.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +46,7 @@ class LessonDialog extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((context) => const TopicPage()),
+                          builder: ((context) => const IntroPage(null)),
                         ),
                       );
                     },
