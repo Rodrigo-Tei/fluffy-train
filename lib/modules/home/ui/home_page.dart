@@ -4,8 +4,10 @@ import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_button.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_dialog.dart';
+import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -89,12 +91,78 @@ class _HomePageState extends State<HomePage> {
     _handlePopDialog();
   }
 
+  AppBar _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: DefaultTheme.grayscale[Grayscale.white],
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/heart-colored.svg',
+                height: 20.0,
+                width: 20.0,
+                allowDrawingOutsideViewBox: true,
+              ),
+              const SizedBox(width: 4.0),
+              Text(
+                '5',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: DefaultTheme.grayscale[Grayscale.black],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Unidade 1',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: DefaultTheme.grayscale[Grayscale.black],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                '5',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: DefaultTheme.grayscale[Grayscale.black],
+                ),
+              ),
+              const SizedBox(width: 4.0),
+              SvgPicture.asset(
+                'assets/icons/fire-colored.svg',
+                height: 20.0,
+                width: 20.0,
+                allowDrawingOutsideViewBox: true,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: _handleListener,
       builder: (BuildContext context, HomePageState state) {
         return Scaffold(
+          appBar: _buildAppBar(),
           body: GestureDetector(
             onTap: _handlePopDialog,
             child: Stack(
