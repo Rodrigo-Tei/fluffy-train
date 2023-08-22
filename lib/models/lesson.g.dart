@@ -13,6 +13,7 @@ Lesson _$LessonFromJson(Map<String, dynamic> json) => Lesson(
           .toList(),
       json['current_level'] as int,
       $enumDecode(_$SubjectEnumMap, json['subject']),
+      (json['percentage_completion'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$LessonToJson(Lesson instance) => <String, dynamic>{
@@ -20,6 +21,7 @@ Map<String, dynamic> _$LessonToJson(Lesson instance) => <String, dynamic>{
       'exercises': instance.exercises,
       'current_level': instance.currentLevel,
       'subject': _$SubjectEnumMap[instance.subject]!,
+      'percentage_completion': instance.percentageCompletion,
     };
 
 const _$SubjectEnumMap = {

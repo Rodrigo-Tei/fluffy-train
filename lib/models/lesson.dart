@@ -5,12 +5,14 @@ part 'lesson.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Lesson {
-  Lesson(this.name, this.exercises, this.currentLevel, this.subject);
+  Lesson(this.name, this.exercises, this.currentLevel, this.subject,
+      this.percentageCompletion);
 
   String name;
   List<Exercise> exercises;
   int currentLevel;
   Subject subject;
+  double percentageCompletion;
 
   factory Lesson.fromJson(Map<String, dynamic> json) => _$LessonFromJson(json);
 
@@ -18,7 +20,8 @@ class Lesson {
 
   @override
   String toString() {
-    return 'Lesson{question: $name, alternatives: $exercises}';
+    return '''Lesson{name: $name, exercises: $exercises, currentLevel: $currentLevel, 
+    subject: $subject, percentageCompletion: $percentageCompletion}''';
   }
 }
 

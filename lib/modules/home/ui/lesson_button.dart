@@ -14,15 +14,18 @@ class LessonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           alignment: Alignment.center,
           children: [
             SimpleCircularProgressBar(
+              mergeMode: true,
               progressColors: [DefaultTheme.golden[Golden.level5]!],
               backStrokeWidth: 6,
               progressStrokeWidth: 6,
-              valueNotifier: ValueNotifier(20),
+              animationDuration: 0,
+              valueNotifier: ValueNotifier(lesson.percentageCompletion),
               backColor: DefaultTheme.transparent,
             ),
             RawMaterialButton(
@@ -52,12 +55,17 @@ class LessonButton extends StatelessWidget {
             ),
           ],
         ),
-        Text(
-          lesson.name,
-          style: const TextStyle(
+        Container(
+          margin: EdgeInsets.only(
+              top: lesson.percentageCompletion < 40 ? 0.0 : 6.0),
+          child: Text(
+            lesson.name,
+            style: const TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.bold,
-              fontSize: 16),
+              fontSize: 16,
+            ),
+          ),
         ),
       ],
     );
