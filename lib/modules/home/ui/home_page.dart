@@ -1,10 +1,9 @@
+import 'package:fluffy_train/models/lesson.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
+import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_button.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_dialog.dart';
-import 'package:fluffy_train/modules/lesson/bloc/lesson_page_bloc.dart';
-import 'package:fluffy_train/modules/lesson/bloc/lesson_page_event.dart';
-import 'package:fluffy_train/modules/lesson/bloc/lesson_page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,14 +17,17 @@ class HomePage extends StatefulWidget {
 @override
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
-
+  late HomePageBloc _homePageBloc;
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
+
+  List<Lesson> lessons = [];
 
   @override
   void initState() {
     super.initState();
-
+    _homePageBloc = context.read<HomePageBloc>();
+    _homePageBloc.add(FetchHomePage());
     _scrollController.addListener(_scrollListener);
   }
 
@@ -36,7 +38,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleListener(
-      BuildContext context, HomePageState state) async {}
+      BuildContext context, HomePageState state) async {
+    if (state is HomePageLoaded) {
+      lessons = state.lessons;
+    }
+  }
 
   EdgeInsetsGeometry _calculateMargin(int index) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -95,12 +101,14 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ListView.builder(
                   controller: _scrollController,
-                  itemCount: 15,
+                  itemCount: lessons.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Center(
                       child: Container(
                         margin: _calculateMargin(index),
-                        child: LessonButton(toggleDialog: _toggleDialog),
+                        child: LessonButton(
+                            toggleDialog: _toggleDialog,
+                            lesson: lessons[index]),
                       ),
                     );
                   },

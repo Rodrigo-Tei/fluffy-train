@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fluffy_train/models/lesson.dart';
 
 abstract class HomePageState extends Equatable {
   final List _props;
@@ -14,4 +15,13 @@ class HomePageLoading extends HomePageState {
 
   @override
   String toString() => 'HomePageLoading';
+}
+
+class HomePageLoaded extends HomePageState {
+  final List<Lesson> lessons;
+
+  HomePageLoaded(this.lessons) : super([lessons]);
+
+  @override
+  String toString() => 'HomePageLoaded';
 }
