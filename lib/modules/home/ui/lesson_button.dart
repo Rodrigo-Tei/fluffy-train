@@ -1,3 +1,4 @@
+import 'package:fluffy_train/commons/text_styles.dart';
 import 'package:fluffy_train/models/lesson.dart';
 import 'package:fluffy_train/theme/color_utils.dart';
 import 'package:fluffy_train/theme/colors.dart';
@@ -60,11 +61,7 @@ class LessonButton extends StatelessWidget {
               top: lesson.percentageCompletion < 40 ? 0.0 : 6.0),
           child: Text(
             lesson.name,
-            style: const TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: TextStyles.title3,
           ),
         ),
       ],

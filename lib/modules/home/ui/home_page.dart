@@ -1,3 +1,4 @@
+import 'package:fluffy_train/commons/text_styles.dart';
 import 'package:fluffy_train/models/lesson.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
@@ -17,13 +18,15 @@ class HomePage extends StatefulWidget {
 }
 
 @override
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late HomePageBloc _homePageBloc;
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
-
+  double _turns = 0.0;
   List<Lesson> lessons = [];
+
+  bool _isExpanded = false;
 
   @override
   void initState() {
@@ -91,67 +94,74 @@ class _HomePageState extends State<HomePage> {
     _handlePopDialog();
   }
 
+  void _expandUnitList() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      _turns += 0.5;
+    });
+  }
+
   AppBar _buildAppBar() {
     return AppBar(
+      elevation: 2.0,
       centerTitle: true,
       backgroundColor: DefaultTheme.grayscale[Grayscale.white],
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                'assets/icons/heart-colored.svg',
-                height: 20.0,
-                width: 20.0,
-                allowDrawingOutsideViewBox: true,
-              ),
-              const SizedBox(width: 4.0),
-              Text(
-                '5',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: DefaultTheme.grayscale[Grayscale.black],
+      title: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/heart-colored.svg',
+                  height: 20.0,
+                  width: 20.0,
+                  allowDrawingOutsideViewBox: true,
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                'Unidade 1',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: DefaultTheme.grayscale[Grayscale.black],
+                const SizedBox(width: 4.0),
+                Text(
+                  '5',
+                  style: TextStyles.title3,
                 ),
+              ],
+            ),
+            GestureDetector(
+              onTap: _expandUnitList,
+              child: Row(
+                children: [
+                  Text(
+                    'Unidade 1',
+                    style: TextStyles.title3,
+                  ),
+                  AnimatedRotation(
+                    turns: _turns,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.arrow_drop_down_rounded,
+                      color: DefaultTheme.grayscale[Grayscale.black],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                '5',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: DefaultTheme.grayscale[Grayscale.black],
+            ),
+            Row(
+              children: [
+                Text(
+                  '5',
+                  style: TextStyles.title3,
                 ),
-              ),
-              const SizedBox(width: 4.0),
-              SvgPicture.asset(
-                'assets/icons/fire-colored.svg',
-                height: 20.0,
-                width: 20.0,
-                allowDrawingOutsideViewBox: true,
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 4.0),
+                SvgPicture.asset(
+                  'assets/icons/fire-colored.svg',
+                  height: 20.0,
+                  width: 20.0,
+                  allowDrawingOutsideViewBox: true,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -163,27 +173,39 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, HomePageState state) {
         return Scaffold(
           appBar: _buildAppBar(),
-          body: GestureDetector(
-            onTap: _handlePopDialog,
-            child: Stack(
-              children: [
-                ListView.builder(
-                  controller: _scrollController,
-                  itemCount: lessons.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                      child: Container(
-                        margin: _calculateMargin(index),
-                        child: LessonButton(
-                            toggleDialog: _toggleDialog,
-                            lesson: lessons[index]),
+          body: Column(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                height: _isExpanded ? 100 : 0,
+                color: Colors.blue,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _handlePopDialog,
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                        controller: _scrollController,
+                        itemCount: lessons.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Center(
+                            child: Container(
+                              margin: _calculateMargin(index),
+                              child: LessonButton(
+                                  toggleDialog: _toggleDialog,
+                                  lesson: lessons[index]),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                      if (_showDialog)
+                        LessonDialog(dialogPosition: _dialogPosition),
+                    ],
+                  ),
                 ),
-                if (_showDialog) LessonDialog(dialogPosition: _dialogPosition),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
