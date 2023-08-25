@@ -5,6 +5,7 @@ import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_button.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_dialog.dart';
+import 'package:fluffy_train/modules/home/ui/unit_card.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   AppBar _buildAppBar() {
     return AppBar(
-      elevation: 2.0,
+      elevation: _isExpanded ? 0.0 : 2.0,
       centerTitle: true,
       backgroundColor: DefaultTheme.grayscale[Grayscale.white],
       title: Container(
@@ -175,10 +176,38 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           appBar: _buildAppBar(),
           body: Column(
             children: [
-              AnimatedContainer(
+              AnimatedCrossFade(
+                firstChild: Container(),
+                secondChild: Container(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  height: 141.0,
+                  decoration: BoxDecoration(
+                    color: DefaultTheme.grayscale[Grayscale.white],
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 2.0,
+                        offset: Offset(0, 0.5),
+                      )
+                    ],
+                  ),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 4,
+                    itemBuilder: (BuildContext context, int index) {
+                      return UnitCard(
+                        isFirst: index == 0,
+                        isLast: index == 3,
+                        isExpanded: _isExpanded,
+                      );
+                    },
+                  ),
+                ),
+                crossFadeState: _isExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
                 duration: const Duration(milliseconds: 200),
-                height: _isExpanded ? 100 : 0,
-                color: Colors.blue,
               ),
               Expanded(
                 child: GestureDetector(
