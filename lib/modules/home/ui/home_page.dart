@@ -1,5 +1,5 @@
 import 'package:fluffy_train/commons/text_styles.dart';
-import 'package:fluffy_train/models/lesson.dart';
+import 'package:fluffy_train/models/unit.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
@@ -25,7 +25,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
   double _turns = 0.0;
-  List<Lesson> lessons = [];
+  List<Unit> units = [];
+  int selectedUnit = 0;
+  bool _loading = true;
 
   bool _isExpanded = false;
 
@@ -45,8 +47,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<void> _handleListener(
       BuildContext context, HomePageState state) async {
+    if (state is HomePageLoading) {
+      _loading = true;
+    }
     if (state is HomePageLoaded) {
-      lessons = state.lessons;
+      units = state.units;
+      _loading = false;
+    }
+    if (state is ChangeUnitLoading) {
+      _loading = true;
+    }
+    if (state is ChangeUnitLoaded) {
+      _loading = false;
     }
   }
 
@@ -99,6 +111,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {
       _isExpanded = !_isExpanded;
       _turns += 0.5;
+    });
+  }
+
+  void _changeUnit(int index) {
+    _homePageBloc.add(ChangeUnit(index));
+    setState(() {
+      selectedUnit = index;
     });
   }
 
@@ -174,68 +193,77 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (BuildContext context, HomePageState state) {
         return Scaffold(
           appBar: _buildAppBar(),
-          body: Column(
-            children: [
-              AnimatedCrossFade(
-                firstChild: Container(),
-                secondChild: Container(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  margin: const EdgeInsets.only(bottom: 12.0),
-                  height: 141.0,
-                  decoration: BoxDecoration(
-                    color: DefaultTheme.grayscale[Grayscale.white],
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 2.0,
-                        offset: Offset(0, 0.5),
-                      )
-                    ],
-                  ),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: (BuildContext context, int index) {
-                      return UnitCard(
-                        isFirst: index == 0,
-                        isLast: index == 3,
-                        isExpanded: _isExpanded,
-                      );
-                    },
-                  ),
-                ),
-                crossFadeState: _isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 200),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: _handlePopDialog,
-                  child: Stack(
-                    children: [
-                      ListView.builder(
-                        controller: _scrollController,
-                        itemCount: lessons.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Center(
-                            child: Container(
-                              margin: _calculateMargin(index),
-                              child: LessonButton(
-                                  toggleDialog: _toggleDialog,
-                                  lesson: lessons[index]),
-                            ),
-                          );
-                        },
+          body: _loading
+              ? Container()
+              : Column(
+                  children: [
+                    AnimatedCrossFade(
+                      firstChild: Container(),
+                      secondChild: Container(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        margin: const EdgeInsets.only(bottom: 12.0),
+                        height: 141.0,
+                        decoration: BoxDecoration(
+                          color: DefaultTheme.grayscale[Grayscale.white],
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 2.0,
+                              offset: Offset(0, 0.5),
+                            )
+                          ],
+                        ),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: units.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                _changeUnit(index);
+                              },
+                              child: UnitCard(
+                                isFirst: index == 0,
+                                isLast: index == units.length - 1,
+                                isExpanded: _isExpanded,
+                                unit: units[index],
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      if (_showDialog)
-                        LessonDialog(dialogPosition: _dialogPosition),
-                    ],
-                  ),
+                      crossFadeState: _isExpanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      duration: const Duration(milliseconds: 200),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: _handlePopDialog,
+                        child: Stack(
+                          children: [
+                            ListView.builder(
+                              controller: _scrollController,
+                              itemCount: units[selectedUnit].lessons.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Center(
+                                  child: Container(
+                                    margin: _calculateMargin(index),
+                                    child: LessonButton(
+                                        toggleDialog: _toggleDialog,
+                                        lesson:
+                                            units[selectedUnit].lessons[index]),
+                                  ),
+                                );
+                              },
+                            ),
+                            if (_showDialog)
+                              LessonDialog(dialogPosition: _dialogPosition),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         );
       },
     );

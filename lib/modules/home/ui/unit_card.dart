@@ -1,4 +1,5 @@
 import 'package:fluffy_train/commons/text_styles.dart';
+import 'package:fluffy_train/models/unit.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -6,10 +7,12 @@ class UnitCard extends StatefulWidget {
   final bool isExpanded;
   final bool isFirst;
   final bool isLast;
+  final Unit unit;
   const UnitCard({
     required this.isExpanded,
     required this.isFirst,
     required this.isLast,
+    required this.unit,
     super.key,
   });
 
@@ -22,6 +25,7 @@ class _UnitCardState extends State<UnitCard> {
   bool get isExpanded => widget.isExpanded;
   bool get isFirst => widget.isFirst;
   bool get isLast => widget.isLast;
+  Unit get unit => widget.unit;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -42,29 +46,20 @@ class _UnitCardState extends State<UnitCard> {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Column(
             children: [
-              // TODO: TURN TO PARAMETER
               Text(
-                'TITULO',
+                unit.title,
                 style: TextStyles.title2,
               ),
               const SizedBox(height: 6.0),
-              // TODO: TURN TO PARAMETER
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'Topico 1',
-                    style: TextStyles.paragraph3,
-                  ),
-                  Text(
-                    'Topico 2',
-                    style: TextStyles.paragraph3,
-                  ),
-                  Text(
-                    'Topico 3',
-                    style: TextStyles.paragraph3,
-                  ),
+                  for (String topic in unit.topics)
+                    Text(
+                      topic,
+                      style: TextStyles.paragraph3,
+                    ),
                   Container(
                     margin: const EdgeInsets.only(top: 6.0, bottom: 8.0),
                     width: 190,
@@ -73,7 +68,7 @@ class _UnitCardState extends State<UnitCard> {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(8.0)),
                       child: LinearProgressIndicator(
-                        value: 0.7, // TODO: TURN TO PARAMETER
+                        value: unit.completePercentage,
                         valueColor: AlwaysStoppedAnimation(
                           DefaultTheme.rythm[Class.level4]!,
                         ),

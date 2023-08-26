@@ -1,4 +1,4 @@
-import 'package:fluffy_train/models/lesson.dart';
+import 'package:fluffy_train/models/unit.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/repositories/home_page_repository.dart';
@@ -9,8 +9,15 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
 
   HomePageBloc(this.homePageRepository) : super(HomePageLoading()) {
     on<FetchHomePage>((event, emit) async {
-      List<Lesson> lessons = await homePageRepository.getLessons();
-      emit(HomePageLoaded(lessons));
+      emit(HomePageLoading());
+      List<Unit> units = await homePageRepository.getLessons();
+      emit(HomePageLoaded(units));
+    });
+
+    on<ChangeUnit>((event, emit) async {
+      emit(ChangeUnitLoading());
+      Unit unit = await homePageRepository.changeUnit(event.index);
+      emit(ChangeUnitLoaded(unit));
     });
   }
 }
