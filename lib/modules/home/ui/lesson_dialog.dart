@@ -34,6 +34,13 @@ class LessonDialog extends StatelessWidget {
         decoration: BoxDecoration(
           color: DefaultTheme.grayscale[Grayscale.lightestGray],
           borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 2.0,
+              offset: Offset(0, 0.5),
+            )
+          ],
         ),
         padding: const EdgeInsets.all(12),
         child: Column(
