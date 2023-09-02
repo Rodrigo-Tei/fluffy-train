@@ -2,7 +2,11 @@ import 'package:fluffy_train/models/lesson.dart';
 import 'package:fluffy_train/models/unit.dart';
 
 class HomePageRequester {
-  static Future<List<Unit>> getLessons() {
+  static Future<Unit> getLessons() {
+    return Future(() => unitsMock[0]);
+  }
+
+  static Future<List<Unit>> getUnitList() {
     return Future(() => unitsMock);
   }
 

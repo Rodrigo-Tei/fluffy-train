@@ -22,11 +22,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late HomePageBloc _homePageBloc;
+  late Unit currentUnit = Unit('', [], 0.0, []);
+  late List<Unit> unitList;
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
   double _turns = 0.0;
-  List<Unit> units = [];
-  int selectedUnit = 0;
   bool _loading = true;
 
   bool _isExpanded = false;
@@ -51,14 +51,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       _loading = true;
     }
     if (state is HomePageLoaded) {
-      units = state.units;
+      currentUnit = state.unit;
+      unitList = state.unitList;
       _loading = false;
     }
     if (state is ChangeUnitLoading) {
-      _loading = true;
+      setState(() {
+        _loading = true;
+      });
     }
     if (state is ChangeUnitLoaded) {
-      _loading = false;
+      currentUnit = state.unit;
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
@@ -68,7 +74,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     switch (position) {
       case 0:
-        return const EdgeInsets.only(left: 0, top: 8.0);
+        return EdgeInsets.only(left: 0, top: index == 0 ? 24.0 : 8.0);
       case 1:
         return EdgeInsets.only(left: screenWidth / 3, top: 8.0);
       case 2:
@@ -116,9 +122,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _changeUnit(int index) {
     _homePageBloc.add(ChangeUnit(index));
-    setState(() {
-      selectedUnit = index;
-    });
   }
 
   AppBar _buildAppBar() {
@@ -191,11 +194,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: _handleListener,
       builder: (BuildContext context, HomePageState state) {
-        return Scaffold(
-          appBar: _buildAppBar(),
-          body: _loading
-              ? Container()
-              : Column(
+        return _loading
+            ? Container(
+                child: Text('CARREGANDO'),
+              )
+            : Scaffold(
+                appBar: _buildAppBar(),
+                body: Column(
                   children: [
                     AnimatedCrossFade(
                       firstChild: Container(),
@@ -215,7 +220,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: units.length,
+                          itemCount: unitList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                               onTap: () {
@@ -223,9 +228,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               },
                               child: UnitCard(
                                 isFirst: index == 0,
-                                isLast: index == units.length - 1,
+                                isLast: index == unitList.length - 1,
                                 isExpanded: _isExpanded,
-                                unit: units[index],
+                                unit: unitList[index],
                               ),
                             );
                           },
@@ -243,15 +248,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           children: [
                             ListView.builder(
                               controller: _scrollController,
-                              itemCount: units[selectedUnit].lessons.length,
+                              itemCount: currentUnit.lessons.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Center(
                                   child: Container(
                                     margin: _calculateMargin(index),
                                     child: LessonButton(
-                                        toggleDialog: _toggleDialog,
-                                        lesson:
-                                            units[selectedUnit].lessons[index]),
+                                      toggleDialog: _toggleDialog,
+                                      lesson: currentUnit.lessons[index],
+                                    ),
                                   ),
                                 );
                               },
@@ -264,7 +269,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-        );
+              );
       },
     );
   }

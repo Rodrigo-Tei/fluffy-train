@@ -10,8 +10,9 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc(this.homePageRepository) : super(HomePageLoading()) {
     on<FetchHomePage>((event, emit) async {
       emit(HomePageLoading());
-      List<Unit> units = await homePageRepository.getLessons();
-      emit(HomePageLoaded(units));
+      Unit unit = await homePageRepository.getLessons();
+      List<Unit> unitList = await homePageRepository.getUnitList();
+      emit(HomePageLoaded(unit, unitList));
     });
 
     on<ChangeUnit>((event, emit) async {

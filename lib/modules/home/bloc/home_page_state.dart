@@ -18,9 +18,10 @@ class HomePageLoading extends HomePageState {
 }
 
 class HomePageLoaded extends HomePageState {
-  final List<Unit> units;
+  final Unit unit;
+  final List<Unit> unitList;
 
-  HomePageLoaded(this.units) : super([units]);
+  HomePageLoaded(this.unit, this.unitList) : super([unit, unitList]);
 
   @override
   String toString() => 'HomePageLoaded';

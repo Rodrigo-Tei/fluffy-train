@@ -3,7 +3,6 @@ import 'package:fluffy_train/models/lesson.dart';
 import 'package:fluffy_train/theme/color_utils.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class LessonButton extends StatelessWidget {
   final Function toggleDialog;
@@ -20,14 +19,13 @@ class LessonButton extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            SimpleCircularProgressBar(
-              mergeMode: true,
-              progressColors: [DefaultTheme.golden[Golden.level5]!],
-              backStrokeWidth: 6,
-              progressStrokeWidth: 6,
-              animationDuration: 0,
-              valueNotifier: ValueNotifier(lesson.percentageCompletion),
-              backColor: DefaultTheme.transparent,
+            Transform.scale(
+              scale: 2.6,
+              child: CircularProgressIndicator(
+                color: DefaultTheme.golden[Golden.level5],
+                strokeWidth: 2.0,
+                value: lesson.percentageCompletion / 100,
+              ),
             ),
             RawMaterialButton(
               onPressed: () {
@@ -36,19 +34,23 @@ class LessonButton extends StatelessWidget {
                 toggleDialog(buttonPosition);
               },
               elevation: 0.0,
-              fillColor:
-                  ColorUtils.getColor(lesson.subject, lesson.currentLevel),
+              fillColor: ColorUtils.getColor(
+                lesson.subject,
+                lesson.currentLevel,
+              ),
               padding: const EdgeInsets.all(16.0),
               shape: const CircleBorder(),
               child: Icon(
                 Icons.pause,
                 size: 48.0,
                 color: ColorUtils.getIconColor(
-                    lesson.subject, lesson.currentLevel),
+                  lesson.subject,
+                  lesson.currentLevel,
+                ),
                 shadows: const [
                   Shadow(
                     color: Colors.black26,
-                    blurRadius: 15.0,
+                    blurRadius: 16.0,
                     offset: Offset(0.0, 6.0),
                   )
                 ],
@@ -58,7 +60,7 @@ class LessonButton extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(
-              top: lesson.percentageCompletion < 40 ? 0.0 : 6.0),
+              top: lesson.percentageCompletion < 40 ? 0.0 : 12.0),
           child: Text(
             lesson.name,
             style: TextStyles.title3,
