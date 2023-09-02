@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class LessonDialog extends StatelessWidget {
   final Offset dialogPosition;
-  const LessonDialog({required this.dialogPosition, Key? key})
+  final bool appbarIsToggled;
+  const LessonDialog(
+      {required this.dialogPosition, required this.appbarIsToggled, Key? key})
       : super(key: key);
 
   double _handleVerticalPosition(
@@ -13,16 +15,18 @@ class LessonDialog extends StatelessWidget {
     double initialPositionDy,
   ) {
     double screenHeight = MediaQuery.of(context).size.height;
-    if (initialPositionDy > screenHeight * 0.8) {
-      return screenHeight * 0.75;
+    if (initialPositionDy > screenHeight * 0.65) {
+      return appbarIsToggled ? screenHeight * 0.45 : screenHeight * 0.65;
     }
-    return initialPositionDy;
+    return appbarIsToggled
+        ? initialPositionDy - 200.0
+        : initialPositionDy - 50.0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _handleVerticalPosition(context, -(dialogPosition.dy - 50)),
+      top: _handleVerticalPosition(context, -dialogPosition.dy),
       left: MediaQuery.of(context).size.width * 0.1,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,

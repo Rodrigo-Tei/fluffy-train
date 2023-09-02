@@ -194,31 +194,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: _handleListener,
       builder: (BuildContext context, HomePageState state) {
-        return _loading
-            ? Container(
-                child: Text('CARREGANDO'),
-              )
-            : Scaffold(
-                appBar: _buildAppBar(),
-                body: Column(
-                  children: [
-                    AnimatedCrossFade(
-                      firstChild: Container(),
-                      secondChild: Container(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        margin: const EdgeInsets.only(bottom: 12.0),
-                        height: 141.0,
-                        decoration: BoxDecoration(
-                          color: DefaultTheme.grayscale[Grayscale.white],
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 2.0,
-                              offset: Offset(0, 0.5),
-                            )
-                          ],
-                        ),
-                        child: ListView.builder(
+        return Scaffold(
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              AnimatedCrossFade(
+                firstChild: Container(),
+                secondChild: Container(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  height: 141.0,
+                  decoration: BoxDecoration(
+                    color: DefaultTheme.grayscale[Grayscale.white],
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 2.0,
+                        offset: Offset(0, 0.5),
+                      )
+                    ],
+                  ),
+                  child: _loading
+                      ? const Text('CARREGANDO') // TODO: LOADING STATE
+                      : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: unitList.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -235,41 +233,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             );
                           },
                         ),
-                      ),
-                      crossFadeState: _isExpanded
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
-                      duration: const Duration(milliseconds: 200),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: _handlePopDialog,
-                        child: Stack(
-                          children: [
-                            ListView.builder(
-                              controller: _scrollController,
-                              itemCount: currentUnit.lessons.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Center(
-                                  child: Container(
-                                    margin: _calculateMargin(index),
-                                    child: LessonButton(
-                                      toggleDialog: _toggleDialog,
-                                      lesson: currentUnit.lessons[index],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            if (_showDialog)
-                              LessonDialog(dialogPosition: _dialogPosition),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              );
+                crossFadeState: _isExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 200),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _handlePopDialog,
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                        controller: _scrollController,
+                        itemCount: currentUnit.lessons.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Center(
+                            child: Container(
+                              margin: _calculateMargin(index),
+                              child: LessonButton(
+                                toggleDialog: _toggleDialog,
+                                lesson: currentUnit.lessons[index],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      if (_showDialog)
+                        LessonDialog(
+                          dialogPosition: _dialogPosition,
+                          appbarIsToggled: _isExpanded,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
