@@ -23,6 +23,14 @@ enum Golden {
   level5,
 }
 
+enum Reds {
+  mahogany,
+  sangria,
+  brick,
+  candy,
+  crismon,
+}
+
 class DefaultTheme {
   static const double colorOpacity = 0.08;
 
@@ -35,7 +43,13 @@ class DefaultTheme {
     Grayscale.lightestGray: Color(0xFFF4F7F9),
     Grayscale.white: Colors.white,
   };
-
+  static const Map<Reds, Color> reds = {
+    Reds.mahogany: Color(0xFF800000),
+    Reds.sangria: Color(0xFF961E1D),
+    Reds.brick: Color(0xFFB22222),
+    Reds.candy: Color(0xFFFF2400),
+    Reds.crismon: Color(0xFFDC143C),
+  };
   static const Map<Class, Color> history = {
     Class.secondary: Color(0xFFFFDAB9),
     Class.level1: Color(0xFFFFB366),
@@ -43,7 +57,6 @@ class DefaultTheme {
     Class.level3: Color(0xFFFF8C00),
     Class.level4: Color(0xFFFF4500),
   };
-
   static const Map<Class, Color> perception = {
     Class.secondary: Color(0xFFFFA7B9),
     Class.level1: Color(0xFFFF8FA0),
@@ -74,6 +87,5 @@ class DefaultTheme {
 
   static final ThemeData theme = ThemeData(
     scaffoldBackgroundColor: DefaultTheme.grayscale[Grayscale.white],
-    // fontFamily: 'Roboto',
   );
 }

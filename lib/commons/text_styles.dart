@@ -72,6 +72,13 @@ class TextStyles {
     color: DefaultTheme.grayscale[Grayscale.black],
   );
 
+  static TextStyle highlight3White = TextStyle(
+    fontFamily: 'OpenSans',
+    fontSize: 14.0,
+    fontWeight: FontWeight.w600,
+    color: DefaultTheme.grayscale[Grayscale.white],
+  );
+
   static TextStyle highlight4 = TextStyle(
     fontFamily: 'OpenSans',
     fontSize: 12.0,

@@ -1,3 +1,4 @@
+import 'package:fluffy_train/commons/text_styles.dart';
 import 'package:fluffy_train/modules/lesson/ui/lesson_page.dart';
 import 'package:fluffy_train/modules/intro/ui/intro_page.dart';
 import 'package:fluffy_train/theme/colors.dart';
@@ -37,15 +38,23 @@ class LessonDialog extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            const Text('AULA 1'),
+            Text(
+              'AULA 1',
+              style: TextStyles.title3,
+            ),
             const SizedBox(height: 12.0),
-            const Text(
-                'Aprenda sobre tópico 1, tópico 2, tópico 3, tópico 4, tópico 5'),
+            Text(
+              'Aprenda sobre tópico 1, tópico 2, tópico 3, tópico 4, tópico 5',
+              style: TextStyles.paragraph3,
+            ),
             const SizedBox(height: 12.0),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: DefaultTheme.reds[Reds.sangria],
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -54,12 +63,18 @@ class LessonDialog extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Visitar matéria'),
+                    child: Text(
+                      'Visitar matéria',
+                      style: TextStyles.highlight3White,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: DefaultTheme.reds[Reds.sangria],
+                    ),
                     onPressed: () => {
                       Navigator.push(
                         context,
@@ -68,7 +83,10 @@ class LessonDialog extends StatelessWidget {
                         ),
                       )
                     },
-                    child: const Text('Ir para a aula'),
+                    child: Text(
+                      'Ir para a aula',
+                      style: TextStyles.highlight3White,
+                    ),
                   ),
                 ),
               ],
