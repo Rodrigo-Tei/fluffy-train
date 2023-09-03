@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
         child: ElevatedButton.icon(
           icon: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset('lib/images/google_icon.svg'),
+            child: SvgPicture.asset('assets/icons/google_icon.svg'),
           ),
           label: Text(
             'Entre com o Google',
