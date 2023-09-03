@@ -1,5 +1,6 @@
 import 'package:fluffy_train/commons/text_styles.dart';
 import 'package:fluffy_train/models/unit.dart';
+import 'package:fluffy_train/common/navbar.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
@@ -270,6 +271,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ],
           ),
+          bottomNavigationBar:
+              buildNavBar(NavbarPageIndex.homePage, context, null),
         );
       },
     );
