@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:fluffy_train/models/exercise.dart';
 
 abstract class LessonPageState extends Equatable {
   final List _props;
@@ -18,7 +18,7 @@ class LessonPageLoading extends LessonPageState {
 }
 
 class LessonPageLoaded extends LessonPageState {
-  List<Widget> exercisesList;
+  final List<Exercise> exercisesList;
   LessonPageLoaded(this.exercisesList) : super([exercisesList]);
 
   @override
