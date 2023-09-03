@@ -12,3 +12,8 @@ abstract class HomePageEvent extends Equatable {
 class FetchHomePage extends HomePageEvent {
   FetchHomePage() : super([]);
 }
+
+class ChangeUnit extends HomePageEvent {
+  final int index;
+  ChangeUnit(this.index) : super([index]);
+}

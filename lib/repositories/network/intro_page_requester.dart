@@ -1,6 +1,5 @@
 import 'package:fluffy_train/models/charDialog.dart';
 import 'package:fluffy_train/models/dialogElement.dart';
-import 'package:just_audio/just_audio.dart';
 
 class IntroPageRequester {
   static Future<List<CharDialog>> getCharDialogs() {

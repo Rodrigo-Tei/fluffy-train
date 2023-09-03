@@ -1,10 +1,16 @@
+import 'package:fluffy_train/commons/text_styles.dart';
+import 'package:fluffy_train/models/unit.dart';
 import 'package:fluffy_train/common/navbar.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_bloc.dart';
+import 'package:fluffy_train/modules/home/bloc/home_page_event.dart';
 import 'package:fluffy_train/modules/home/bloc/home_page_state.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_button.dart';
 import 'package:fluffy_train/modules/home/ui/lesson_dialog.dart';
+import 'package:fluffy_train/modules/home/ui/unit_card.dart';
+import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,16 +20,23 @@ class HomePage extends StatefulWidget {
 }
 
 @override
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-
+  late HomePageBloc _homePageBloc;
+  late Unit currentUnit = Unit('', [], 0.0, []);
+  late List<Unit> unitList;
   Offset _dialogPosition = Offset.zero;
   bool _showDialog = false;
+  double _turns = 0.0;
+  bool _loading = true;
+
+  bool _isExpanded = false;
 
   @override
   void initState() {
     super.initState();
-
+    _homePageBloc = context.read<HomePageBloc>();
+    _homePageBloc.add(FetchHomePage());
     _scrollController.addListener(_scrollListener);
   }
 
@@ -34,7 +47,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleListener(
-      BuildContext context, HomePageState state) async {}
+      BuildContext context, HomePageState state) async {
+    if (state is HomePageLoading) {
+      _loading = true;
+    }
+    if (state is HomePageLoaded) {
+      currentUnit = state.unit;
+      unitList = state.unitList;
+      _loading = false;
+    }
+    if (state is ChangeUnitLoading) {
+      setState(() {
+        _loading = true;
+      });
+    }
+    if (state is ChangeUnitLoaded) {
+      currentUnit = state.unit;
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
 
   EdgeInsetsGeometry _calculateMargin(int index) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -42,7 +75,7 @@ class _HomePageState extends State<HomePage> {
 
     switch (position) {
       case 0:
-        return const EdgeInsets.only(left: 0, top: 8.0);
+        return EdgeInsets.only(left: 0, top: index == 0 ? 24.0 : 8.0);
       case 1:
         return EdgeInsets.only(left: screenWidth / 3, top: 8.0);
       case 2:
@@ -81,31 +114,162 @@ class _HomePageState extends State<HomePage> {
     _handlePopDialog();
   }
 
+  void _expandUnitList() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      _turns += 0.5;
+    });
+  }
+
+  void _changeUnit(int index) {
+    _homePageBloc.add(ChangeUnit(index));
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      elevation: _isExpanded ? 0.0 : 2.0,
+      centerTitle: true,
+      backgroundColor: DefaultTheme.grayscale[Grayscale.white],
+      title: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/heart-colored.svg',
+                  height: 20.0,
+                  width: 20.0,
+                  allowDrawingOutsideViewBox: true,
+                ),
+                const SizedBox(width: 4.0),
+                Text(
+                  '5',
+                  style: TextStyles.title3,
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: _expandUnitList,
+              child: Row(
+                children: [
+                  Text(
+                    'Unidade 1',
+                    style: TextStyles.title3,
+                  ),
+                  AnimatedRotation(
+                    turns: _turns,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.arrow_drop_down_rounded,
+                      color: DefaultTheme.grayscale[Grayscale.black],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  '5',
+                  style: TextStyles.title3,
+                ),
+                const SizedBox(width: 4.0),
+                SvgPicture.asset(
+                  'assets/icons/fire-colored.svg',
+                  height: 20.0,
+                  width: 20.0,
+                  allowDrawingOutsideViewBox: true,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: _handleListener,
       builder: (BuildContext context, HomePageState state) {
         return Scaffold(
-          body: GestureDetector(
-            onTap: _handlePopDialog,
-            child: Stack(
-              children: [
-                ListView.builder(
-                  controller: _scrollController,
-                  itemCount: 15,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                      child: Container(
-                        margin: _calculateMargin(index),
-                        child: LessonButton(toggleDialog: _toggleDialog),
-                      ),
-                    );
-                  },
+          appBar: _buildAppBar(),
+          body: Column(
+            children: [
+              AnimatedCrossFade(
+                firstChild: Container(),
+                secondChild: Container(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  height: 141.0,
+                  decoration: BoxDecoration(
+                    color: DefaultTheme.grayscale[Grayscale.white],
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 2.0,
+                        offset: Offset(0, 0.5),
+                      )
+                    ],
+                  ),
+                  child: _loading
+                      ? const Text('CARREGANDO') // TODO: LOADING STATE
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: unitList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                _changeUnit(index);
+                              },
+                              child: UnitCard(
+                                isFirst: index == 0,
+                                isLast: index == unitList.length - 1,
+                                isExpanded: _isExpanded,
+                                unit: unitList[index],
+                              ),
+                            );
+                          },
+                        ),
                 ),
-                if (_showDialog) LessonDialog(dialogPosition: _dialogPosition),
-              ],
-            ),
+                crossFadeState: _isExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 200),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _handlePopDialog,
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                        controller: _scrollController,
+                        itemCount: currentUnit.lessons.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Center(
+                            child: Container(
+                              margin: _calculateMargin(index),
+                              child: LessonButton(
+                                toggleDialog: _toggleDialog,
+                                lesson: currentUnit.lessons[index],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      if (_showDialog)
+                        LessonDialog(
+                          dialogPosition: _dialogPosition,
+                          appbarIsToggled: _isExpanded,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           bottomNavigationBar:
               buildNavBar(NavbarPageIndex.homePage, context, null),
