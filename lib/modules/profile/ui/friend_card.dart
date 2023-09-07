@@ -1,4 +1,5 @@
 import 'package:fluffy_train/commons/text_styles.dart';
+import 'package:fluffy_train/models/friend.dart';
 import 'package:fluffy_train/modules/profile/ui/profile_placeholder.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,11 @@ import 'package:flutter/material.dart';
 class FriendCard extends StatefulWidget {
   final bool isFirst;
   final bool isLast;
+  final Friend friend;
   const FriendCard(
     this.isFirst,
-    this.isLast, {
+    this.isLast,
+    this.friend, {
     super.key,
   });
 
@@ -20,6 +23,7 @@ class FriendCard extends StatefulWidget {
 class _FriendCardState extends State<FriendCard> {
   bool get isFirst => widget.isFirst;
   bool get isLast => widget.isLast;
+  Friend get friend => widget.friend;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -66,7 +70,7 @@ class _FriendCardState extends State<FriendCard> {
                         children: [
                           profilePlaceholder(64.0),
                           Text(
-                            'Name Placeholder',
+                            friend.name,
                             style: TextStyles.paragraph1,
                           ),
                           Text(

@@ -1,9 +1,11 @@
 import 'package:fluffy_train/auth_service.dart';
 import 'package:fluffy_train/common/navbar.dart';
 import 'package:fluffy_train/commons/text_styles.dart';
+import 'package:fluffy_train/models/friend.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_bloc.dart';
+import 'package:fluffy_train/modules/profile/bloc/profile_page_event.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_state.dart';
-import 'package:fluffy_train/modules/profile/ui/firend_card.dart';
+import 'package:fluffy_train/modules/profile/ui/friend_card.dart';
 import 'package:fluffy_train/modules/profile/ui/profile_placeholder.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -18,16 +20,29 @@ class ProfilePage extends StatefulWidget {
 
 @override
 class _ProfilePageState extends State<ProfilePage> {
+  late ProfilePageBloc _profilePageBloc;
+  bool _loading = true;
   bool _enableNotifications = false;
   bool _enableCharacterLines = false;
+  List<Friend> followers = [];
 
   @override
   void initState() {
     super.initState();
+    _profilePageBloc = context.read<ProfilePageBloc>();
+    _profilePageBloc.add(FetchProfilePage());
   }
 
   Future<void> _handleListener(
-      BuildContext context, ProfilePageState state) async {}
+      BuildContext context, ProfilePageState state) async {
+    if (state is ProfilePageLoading) {
+      _loading = true;
+    }
+    if (state is ProfilePageLoaded) {
+      followers = state.followers;
+      _loading = false;
+    }
+  }
 
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
@@ -135,23 +150,35 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 8,
+                        itemCount: followers.length + 1,
                         itemBuilder: (BuildContext context, int index) {
-                          return FriendCard(index == 0, index == 7);
+                          return FriendCard(
+                            index == 0,
+                            index == followers.length - 1,
+                            followers[index],
+                          );
                         },
                       ),
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 2,
                         itemBuilder: (BuildContext context, int index) {
-                          return FriendCard(index == 0, index == 1);
+                          return FriendCard(
+                            index == 0,
+                            index == 1,
+                            followers[index],
+                          );
                         },
                       ),
                       ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
                         itemBuilder: (BuildContext context, int index) {
-                          return FriendCard(index == 0, index == 4);
+                          return FriendCard(
+                            index == 0,
+                            index == 4,
+                            followers[index],
+                          );
                         },
                       ),
                     ],
@@ -270,25 +297,27 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (BuildContext context, ProfilePageState state) {
         return Scaffold(
           appBar: _buildAppbar(),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 16.0,
-              ),
-              child: ListView(
-                children: [
-                  _buildInfoSection(),
-                  const SizedBox(height: 24.0),
-                  _buildFriendsSection(),
-                  const SizedBox(height: 24.0),
-                  _buildSettingsSection(),
-                  const SizedBox(height: 12.0),
-                  _buildLoggoutButton(),
-                ],
-              ),
-            ),
-          ),
+          body: _loading
+              ? Container()
+              : SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 16.0,
+                    ),
+                    child: ListView(
+                      children: [
+                        _buildInfoSection(),
+                        const SizedBox(height: 24.0),
+                        _buildFriendsSection(),
+                        const SizedBox(height: 24.0),
+                        _buildSettingsSection(),
+                        const SizedBox(height: 12.0),
+                        _buildLoggoutButton(),
+                      ],
+                    ),
+                  ),
+                ),
           bottomNavigationBar:
               buildNavBar(NavbarPageIndex.profilePage, context, null),
         );
