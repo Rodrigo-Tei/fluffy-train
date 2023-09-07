@@ -2,6 +2,7 @@ import 'package:fluffy_train/modules/home/ui/home_page.dart';
 import 'package:fluffy_train/modules/profile/ui/profile_page.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum NavbarPageIndex {
   homePage,
@@ -34,9 +35,9 @@ Widget buildNavBar(
   int currentIndex = currentPage?.key ?? 0;
 
   return BottomNavigationBar(
+    showSelectedLabels: false,
+    showUnselectedLabels: false,
     backgroundColor: DefaultTheme.grayscale[Grayscale.white],
-    selectedItemColor: Colors.blue,
-    unselectedItemColor: DefaultTheme.grayscale[Grayscale.gray],
     currentIndex: currentIndex,
     elevation: 0,
     type: BottomNavigationBarType.fixed,
@@ -74,14 +75,36 @@ Widget buildNavBar(
         }
       }
     },
-    items: const [
+    items: [
       BottomNavigationBarItem(
-        icon: Icon(Icons.book),
-        label: 'Home',
+        icon: SvgPicture.asset(
+          'assets/icons/home.svg',
+          colorFilter: ColorFilter.mode(
+            DefaultTheme.grayscale[Grayscale.gray]!,
+            BlendMode.srcIn,
+          ),
+        ),
+        activeIcon: SvgPicture.asset(
+          'assets/icons/home-colored.svg',
+        ),
+        label: '',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: 'Perfil',
+        icon: SvgPicture.asset(
+          'assets/icons/profile.svg',
+          colorFilter: ColorFilter.mode(
+            DefaultTheme.grayscale[Grayscale.gray]!,
+            BlendMode.srcIn,
+          ),
+        ),
+        activeIcon: SvgPicture.asset(
+          'assets/icons/profile.svg',
+          colorFilter: ColorFilter.mode(
+            DefaultTheme.perception[Class.level4]!,
+            BlendMode.srcIn,
+          ),
+        ),
+        label: '',
       ),
     ],
   );

@@ -4,6 +4,7 @@ import 'package:fluffy_train/commons/text_styles.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_bloc.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_state.dart';
 import 'package:fluffy_train/modules/profile/ui/firend_card.dart';
+import 'package:fluffy_train/modules/profile/ui/profile_placeholder.dart';
 import 'package:fluffy_train/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,8 @@ class ProfilePage extends StatefulWidget {
 
 @override
 class _ProfilePageState extends State<ProfilePage> {
-  bool _notificationsSwitch = false;
+  bool _enableNotifications = false;
+  bool _enableCharacterLines = false;
 
   @override
   void initState() {
@@ -29,7 +31,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
-      border: Border.all(color: DefaultTheme.grayscale[Grayscale.gray]!),
+      border: Border.all(
+        width: 2.0,
+        color: DefaultTheme.grayscale[Grayscale.gray]!,
+      ),
       borderRadius: const BorderRadius.all(
         Radius.circular(8.0),
       ),
@@ -54,13 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 128.0,
-            width: 128.0,
-            decoration: BoxDecoration(
-                color: DefaultTheme.grayscale[Grayscale.lightGray],
-                shape: BoxShape.circle),
-          ),
+          profilePlaceholder(128.0),
           const SizedBox(width: 12.0),
           Expanded(
             child: Column(
@@ -99,71 +98,70 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildFriendsSection() {
-    return Flexible(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Amizades',
-            style: TextStyles.title1,
-          ),
-          Container(
-            height: 250,
-            decoration: _buildBoxDecoration(),
-            child: DefaultTabController(
-              length: 3,
-              child: Column(
-                children: <Widget>[
-                  Material(
-                    color: Colors.transparent,
-                    child: TabBar(
-                      isScrollable: true,
-                      labelStyle: TextStyles.title2,
-                      indicatorColor: DefaultTheme.reds[Reds.crismon],
-                      labelColor: DefaultTheme.grayscale[Grayscale.black],
-                      unselectedLabelColor:
-                          DefaultTheme.grayscale[Grayscale.gray],
-                      tabs: const [
-                        Tab(text: "Seguidores"),
-                        Tab(text: "Seguindo"),
-                        Tab(text: "Encontre"),
-                      ],
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Amizades',
+          style: TextStyles.title1,
+        ),
+        const SizedBox(height: 12.0),
+        Container(
+          height: 300,
+          decoration: _buildBoxDecoration(),
+          child: DefaultTabController(
+            length: 3,
+            child: Column(
+              children: [
+                Material(
+                  color: Colors.transparent,
+                  child: TabBar(
+                    isScrollable: true,
+                    labelStyle: TextStyles.title2,
+                    indicatorColor: DefaultTheme.reds[Reds.crismon],
+                    labelColor: DefaultTheme.grayscale[Grayscale.black],
+                    unselectedLabelColor:
+                        DefaultTheme.grayscale[Grayscale.gray],
+                    tabs: const [
+                      Tab(text: "Seguidores"),
+                      Tab(text: "Seguindo"),
+                      Tab(text: "Encontre"),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: TabBarView(
-                      children: [
-                        ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 8,
-                          itemBuilder: (BuildContext context, int index) {
-                            return FriendCard();
-                          },
-                        ),
-                        ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 2,
-                          itemBuilder: (BuildContext context, int index) {
-                            return FriendCard();
-                          },
-                        ),
-                        ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            return FriendCard();
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: TabBarView(
+                    children: [
+                      ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 8,
+                        itemBuilder: (BuildContext context, int index) {
+                          return FriendCard(index == 0, index == 7);
+                        },
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 2,
+                        itemBuilder: (BuildContext context, int index) {
+                          return FriendCard(index == 0, index == 1);
+                        },
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, int index) {
+                          return FriendCard(index == 0, index == 4);
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -175,6 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
           'Configurações',
           style: TextStyles.title1,
         ),
+        const SizedBox(height: 12.0),
         Container(
           padding: const EdgeInsets.all(12.0),
           decoration: _buildBoxDecoration(),
@@ -195,17 +194,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               Switch(
-                value: _notificationsSwitch,
+                value: _enableNotifications,
                 activeColor: DefaultTheme.reds[Reds.crismon],
                 onChanged: (bool value) {
                   setState(() {
-                    _notificationsSwitch = value;
+                    _enableNotifications = value;
                   });
                 },
               ),
             ],
           ),
         ),
+        const SizedBox(height: 8.0),
         Container(
           padding: const EdgeInsets.all(12.0),
           decoration: _buildBoxDecoration(),
@@ -229,11 +229,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Switch(
-                value: _notificationsSwitch,
+                value: _enableCharacterLines,
                 activeColor: DefaultTheme.reds[Reds.crismon],
                 onChanged: (bool value) {
                   setState(() {
-                    _notificationsSwitch = value;
+                    _enableCharacterLines = value;
                   });
                 },
               ),
@@ -279,8 +279,11 @@ class _ProfilePageState extends State<ProfilePage> {
               child: ListView(
                 children: [
                   _buildInfoSection(),
+                  const SizedBox(height: 24.0),
                   _buildFriendsSection(),
+                  const SizedBox(height: 24.0),
                   _buildSettingsSection(),
+                  const SizedBox(height: 12.0),
                   _buildLoggoutButton(),
                 ],
               ),
