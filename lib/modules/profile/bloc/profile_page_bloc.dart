@@ -1,3 +1,4 @@
+import 'package:fluffy_train/models/friend.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_event.dart';
 import 'package:fluffy_train/modules/profile/bloc/profile_page_state.dart';
 import 'package:fluffy_train/repositories/profile_page_repository.dart';
@@ -9,8 +10,8 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   ProfilePageBloc(this.profilePageRepository) : super(ProfilePageLoading()) {
     on<FetchProfilePage>((event, emit) async {
       emit(ProfilePageLoading());
-
-      emit(ProfilePageLoaded());
+      List<Friend> followers = await profilePageRepository.getFollowers();
+      emit(ProfilePageLoaded(followers));
     });
   }
 }

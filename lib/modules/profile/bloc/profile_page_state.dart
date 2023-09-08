@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fluffy_train/models/friend.dart';
 
 abstract class ProfilePageState extends Equatable {
   final List _props;
@@ -17,8 +18,13 @@ class ProfilePageLoading extends ProfilePageState {
 }
 
 class ProfilePageLoaded extends ProfilePageState {
-  ProfilePageLoaded() : super([]);
+  final List<Friend> followers;
+  ProfilePageLoaded(
+    this.followers,
+  ) : super([
+          followers,
+        ]);
 
   @override
-  String toString() => 'ProfilePageLoaded';
+  String toString() => 'ProfilePageLoaded{followers: $followers}';
 }
